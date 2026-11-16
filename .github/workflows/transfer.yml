@@ -1,0 +1,35 @@
+name: Transfer compiled app
+on:
+  push:
+    branches: [app-download]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Dissect-v0.1.1-Apple-Silicon
+          run-id: 43979651422
+          github-token: ${{ github.token }}
+          path: stage
+      - name: Split verified archive for transfer
+        run: |
+          echo '8e6e4d0b5e169d8c91a5c743d279136feb6fbc50add7936e654026db2a49b5a7  stage/Dissect-v0.1.1-Apple-Silicon.zip' | sha256sum -c -
+          split -b 400M -d stage/Dissect-v0.1.1-Apple-Silicon.zip stage/Dissect.part-
+          ls -lh stage/Dissect.part-*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Dissect-transfer-00
+          path: stage/Dissect.part-00
+          compression-level: 0
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Dissect-transfer-01
+          path: stage/Dissect.part-01
+          compression-level: 0
+          retention-days: 7
