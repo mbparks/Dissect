@@ -42,7 +42,10 @@ jobs:
           set -o pipefail
           'build/Packaged App/Dissect.app/Contents/Resources/Runtime/python/bin/python3' tests/integration.py | tee build/evidence/engine-integration.json
       - name: Launch packaged app and verify bundled runtime
-        run: bash scripts/check-app-launch.sh "$PWD/build/Packaged App/Dissect.app"
+        run: |
+          mv 'build/Packaged App' 'build/Relocated App'
+          bash scripts/check-app-launch.sh "$PWD/build/Relocated App/Dissect.app"
+          mv 'build/Relocated App' 'build/Packaged App'
       - name: Package download
         run: |
           mkdir -p dist

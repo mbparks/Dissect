@@ -35,7 +35,24 @@ python_bin="$runtime/python/bin/python3"
   cd "$runtime/ghidra/support/gradle"
   MACOSX_DEPLOYMENT_TARGET=14.0 ./gradlew --no-daemon buildNatives
 )
+# Support Gradle writes into each module's build/os directory. Install the
+# resulting files into the distribution's normal os directory before cleanup.
+"$python_bin" - "$runtime/ghidra" <<'PYINSTALL'
+from pathlib import Path
+import shutil,sys
+root=Path(sys.argv[1])
+for native in root.glob('**/build/os/mac_arm_64'):
+    target=native.parents[2]/'os/mac_arm_64'
+    shutil.copytree(native,target,dirs_exist_ok=True)
+    print('Installed native module:',target)
+PYINSTALL
 decompiler="$runtime/ghidra/Ghidra/Features/Decompiler/os/mac_arm_64/decompile"
+if [ ! -x "$decompiler" ]; then
+  find "$runtime/ghidra" -name decompile -print
+  echo 'Native decompiler install failed' >&2
+  exit 1
+fi
+find "$runtime/ghidra" -type d \( -name build -o -name .gradle \) -prune -exec rm -rf {} +
 test -x "$decompiler"
 file "$decompiler" "$python_bin" "$JAVA_HOME/bin/java"
 cp examples/firmware-arm64-macho.o "$destination/Contents/Resources/Samples/"

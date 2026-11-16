@@ -40,7 +40,7 @@ def main():
             assert status['analysis']=='complete' and status['functions']>0; checks.append('native executable import and analysis')
             functions=request('index',kind='functions',query='alarm_for_temperature')['items']; assert functions
             address=functions[0]['address']
-            detail=request('function',address=address); assert 'alarm_for_temperature' in detail['code'] and detail['assembly']; checks.append('real decompilation and assembly')
+            detail=request('function',address=address); original_name=detail['name']; assert 'alarm_for_temperature' in detail['code'] and detail['assembly']; checks.append('real decompilation and assembly')
             assert request('references',address=address)['items']; checks.append('caller references')
             strings=request('index',kind='strings',query='Dissect workshop')['items']; assert strings; checks.append('defined strings search')
             assert request('references',address=strings[0]['address'])['items']; checks.append('string cross references')
@@ -48,7 +48,7 @@ def main():
             assert request('index',kind='functions',limit=1)['hasMore']; checks.append('pagination')
             request('edit',address=address,operation='rename',value='temperature_alarm')
             assert request('function',address=address)['name']=='temperature_alarm'; checks.append('rename refresh')
-            request('undo'); assert request('function',address=address)['name']=='alarm_for_temperature'
+            request('undo'); assert request('function',address=address)['name']==original_name
             request('redo'); assert request('function',address=address)['name']=='temperature_alarm'; checks.append('undo and redo')
             request('edit',address=address,operation='note',value='Hysteresis band 28–32 C. 🛠')
             request('edit',address=address,operation='signature',value='int temperature_alarm(int temperature)')
