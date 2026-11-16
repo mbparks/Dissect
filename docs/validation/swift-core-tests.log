@@ -1,0 +1,37 @@
+Building for debugging...
+[Computing dependencies]
+[Pre-planning 1 / 124]
+[Planning deferred tasks]
+[30 / 53] DissectCore
+[39 / 57] DissectCoreTests-product
+[43 / 57] DissectCoreTests-product
+[46 / 58] DissectCore
+[51 / 59] DissectCore-product
+[51 / 59] DissectCoreTests-product
+[55 / 62] DissectCoreTests-test-runner
+[62 / 63] DissectCoreTests-test-runner
+[63 / 63] DissectCoreTests-test-runner
+Build complete! (11.40 secs)
+Test Suite 'All tests' started at 2026-11-16 13:20:05.279
+Test Suite 'Debug-linux-x86_64.xctest' started at 2026-11-16 13:20:05.282
+Test Suite 'ProtocolTests' started at 2026-11-16 13:20:05.282
+Test Case 'ProtocolTests.testFragmentedUnicodeAndMultipleMessages' started at 2026-11-16 13:20:05.282
+Test Case 'ProtocolTests.testFragmentedUnicodeAndMultipleMessages' passed (0.002 seconds)
+Test Case 'ProtocolTests.testNoiseIsIgnoredAndMalformedFrameIsRejected' started at 2026-11-16 13:20:05.284
+Test Case 'ProtocolTests.testNoiseIsIgnoredAndMalformedFrameIsRejected' passed (0.001 seconds)
+Test Case 'ProtocolTests.testOversizeIncompleteMessageIsRejected' started at 2026-11-16 13:20:05.285
+Test Case 'ProtocolTests.testOversizeIncompleteMessageIsRejected' passed (0.013 seconds)
+Test Case 'ProtocolTests.testRequestEscapesPathsWithoutShellExpansion' started at 2026-11-16 13:20:05.298
+Test Case 'ProtocolTests.testRequestEscapesPathsWithoutShellExpansion' passed (0.001 seconds)
+Test Case 'ProtocolTests.testWorkspaceContractAndLargeAddressStrings' started at 2026-11-16 13:20:05.299
+Test Case 'ProtocolTests.testWorkspaceContractAndLargeAddressStrings' passed (0.105 seconds)
+Test Suite 'ProtocolTests' passed at 2026-11-16 13:20:05.403
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.121 (0.121) seconds
+Test Suite 'Debug-linux-x86_64.xctest' passed at 2026-11-16 13:20:05.404
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.121 (0.121) seconds
+Test Suite 'All tests' passed at 2026-11-16 13:20:05.404
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.121 (0.121) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.4.2 (288a2328ff84644)
+↳ Target Platform: x86_64-unknown-linux-gnu
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

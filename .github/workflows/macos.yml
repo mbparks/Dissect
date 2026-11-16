@@ -1,0 +1,64 @@
+name: Apple Silicon app
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm native Apple Silicon runner
+        run: |
+          test "$(uname -m)" = arm64
+          xcodebuild -version
+      - name: Swift and workspace checks
+        run: |
+          swift test
+          python3 -m unittest discover -s tests -p 'test_*.py' -v
+          python3 scripts/check-project.py
+      - name: Compile native app
+        run: |
+          set -o pipefail
+          mkdir -p build/evidence
+          xcodebuild -project Dissect.xcodeproj -scheme Dissect -configuration Release -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO ARCHS=arm64 ONLY_ACTIVE_ARCH=NO build 2>&1 | tee build/evidence/xcodebuild.log
+          mkdir -p 'build/Packaged App'
+          ditto build/DerivedData/Build/Products/Release/Dissect.app 'build/Packaged App/Dissect.app'
+      - name: Bundle native analysis runtime
+        run: bash scripts/bundle-runtime.sh "$PWD/build/Packaged App/Dissect.app"
+      - name: Sign nested code and application
+        run: |
+          set -o pipefail
+          python3 scripts/sign-bundle.py 'build/Packaged App/Dissect.app' 2>&1 | tee build/evidence/signing.log
+      - name: Exercise Ghidra workflows on Apple Silicon
+        run: |
+          export GHIDRA_INSTALL_DIR="$PWD/build/Packaged App/Dissect.app/Contents/Resources/Runtime/ghidra"
+          export JAVA_HOME="$PWD/build/Packaged App/Dissect.app/Contents/Resources/Runtime/java.jdk/Contents/Home"
+          export PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1
+          set -o pipefail
+          'build/Packaged App/Dissect.app/Contents/Resources/Runtime/python/bin/python3' tests/integration.py | tee build/evidence/engine-integration.json
+      - name: Launch packaged app and verify bundled runtime
+        run: bash scripts/check-app-launch.sh "$PWD/build/Packaged App/Dissect.app"
+      - name: Package download
+        run: |
+          mkdir -p dist
+          cp START-HERE.txt 'build/Packaged App/READ-ME-FIRST.txt'
+          ditto -c -k --sequesterRsrc --keepParent 'build/Packaged App' dist/Dissect-v0.1.1-Apple-Silicon.zip
+          shasum -a 256 dist/*.zip | tee build/evidence/SHA256.txt
+          file 'build/Packaged App/Dissect.app/Contents/MacOS/Dissect' | tee build/evidence/architecture.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Dissect-v0.1.1-Apple-Silicon
+          path: dist/Dissect-v0.1.1-Apple-Silicon.zip
+          compression-level: 0
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: macOS-build-evidence
+          path: build/evidence/
+          retention-days: 30

@@ -1,0 +1,10 @@
+.build/
+build/
+dist/
+.DS_Store
+__pycache__/
+*.pyc
+*.dissect/
+examples/built/
+xcuserdata/
+*.xcuserstate

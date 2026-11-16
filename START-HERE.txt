@@ -1,0 +1,48 @@
+DISSECT 0.1.1 — APPLE SILICON APP PREVIEW
+
+INSTALL
+1. Unzip Dissect-v0.1.1-Apple-Silicon.zip.
+2. Drag Dissect.app to Applications.
+3. Open Dissect. Requires an Apple Silicon Mac and macOS 14 or newer.
+
+Ghidra 12.2, its compiled ARM64 decompiler, Python, and Java are included.
+You do not need Xcode, Homebrew, Python, Java, or a separate Ghidra installation.
+Analysis works offline. Allow about 2 GB of disk space for the app and runtime.
+
+This preview is ad-hoc signed, not Apple Developer ID signed or notarized.
+If macOS blocks it, attempt to open it once, then use System Settings > Privacy
+& Security > Open Anyway for Dissect. Do this only for the copy you downloaded
+from this delivery. You do not need to disable Gatekeeper system-wide.
+
+FIRST USE
+Click Import Binary or drop a binary into the window. Choose a new workspace
+name and wait for analysis. Use Functions or Strings, then select an item to
+see code, assembly, bytes and references. Edits are saved to the workspace.
+Engine Settings > Check Engine verifies the included runtime.
+
+For a sample, right-click Dissect.app > Show Package Contents, then import:
+  Contents/Resources/Samples/firmware-arm64-macho.o
+Search for alarm_for_temperature. This file is an ARM64 object for analysis;
+Dissect does not execute imported binaries.
+
+For raw firmware, enable the raw-firmware option, choose the processor,
+compiler and load address. Known entry points can be defined as functions.
+Some images need memory mappings or processor-context settings available
+only in the full Ghidra interface.
+
+BACKUP
+Keep the entire .dissect workspace package; it contains the original binary
+and Ghidra database. Renames, function signatures and notes save immediately.
+Undo/redo covers the last 100 annotation edits during the current session.
+Defining a function resets annotation undo. Do not open a workspace in Ghidra
+and Dissect simultaneously.
+
+RECOVERY
+In Engine Settings, Use Included Engine resets any old custom runtime paths.
+Copy Diagnostic Log helps troubleshoot a startup or analysis error.
+If analysis was cancelled, reopen the workspace and choose Run Analysis.
+
+This is an early functional preview, not a complete Ghidra UI replacement.
+Source and build history: https://github.com/mbparks/Dissect (private).
+Bundled third-party licenses and source remain in Contents/Resources/Runtime.
+Dissect is independent software, not affiliated with or endorsed by the NSA.

@@ -1,0 +1,24 @@
+{
+  "passed": 19,
+  "checks": [
+    "real engine startup",
+    "installed processor and compiler discovery",
+    "native executable import and analysis",
+    "real decompilation and assembly",
+    "caller references",
+    "defined strings search",
+    "string cross references",
+    "memory bytes",
+    "pagination",
+    "rename refresh",
+    "undo and redo",
+    "function signature/type edit",
+    "save close reopen with edits and unicode notes",
+    "malformed signature rollback",
+    "cancel checkpoint and successful reanalysis",
+    "raw firmware explicit language compiler and image base",
+    "define and decompile function in raw firmware",
+    "switch between workspaces without losing edits",
+    "ARM64 Mach-O import and decompilation"
+  ]
+}
