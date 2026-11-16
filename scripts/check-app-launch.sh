@@ -23,4 +23,5 @@ PY
 sleep 2
 screencapture -x build/evidence/dissect-running.png || true
 osascript -e 'tell application "Dissect" to quit'
-codesign --verify --deep --strict "$app"
+python3 scripts/bundle-integrity.py "$app" build/evidence/bundle-before.json | tee build/evidence/bundle-after-app.json
+codesign --verify --deep --strict --verbose=4 "$app"

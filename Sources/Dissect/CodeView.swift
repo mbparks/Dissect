@@ -48,6 +48,7 @@ import AppKit
             }
         }
         view.textStorage?.setAttributedString(rendered)
-        view.scrollToBeginningOfDocument(nil)
+        scroll.contentView.scroll(to: .zero)
+        scroll.reflectScrolledClipView(scroll.contentView)
     }
 }

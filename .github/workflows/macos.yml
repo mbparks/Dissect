@@ -34,6 +34,7 @@ jobs:
         run: |
           set -o pipefail
           python3 scripts/sign-bundle.py 'build/Packaged App/Dissect.app' 2>&1 | tee build/evidence/signing.log
+          python3 scripts/bundle-integrity.py 'build/Packaged App/Dissect.app' build/evidence/bundle-before.json
       - name: Exercise Ghidra workflows on Apple Silicon
         run: |
           export GHIDRA_INSTALL_DIR="$PWD/build/Packaged App/Dissect.app/Contents/Resources/Runtime/ghidra"
@@ -41,6 +42,7 @@ jobs:
           export PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1
           set -o pipefail
           'build/Packaged App/Dissect.app/Contents/Resources/Runtime/python/bin/python3' tests/integration.py | tee build/evidence/engine-integration.json
+          python3 scripts/bundle-integrity.py 'build/Packaged App/Dissect.app' build/evidence/bundle-before.json | tee build/evidence/bundle-after-engine.json
       - name: Launch packaged app and verify bundled runtime
         run: |
           mv 'build/Packaged App' 'build/Relocated App'
