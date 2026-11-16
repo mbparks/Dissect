@@ -21,4 +21,5 @@ for asset in (root/'Resources/Assets.xcassets').glob('*/Contents.json'):
 for f in list(root.glob('*.command'))+[root/'Resources/EngineSetup.command']:
     assert f.stat().st_mode & stat.S_IXUSR, f'Missing executable bit: {f}'
 assert (root/'Resources/Engine/engine.py').is_file() and (root/'Resources/Engine/storage.py').is_file()
-print(f'Project paths, 7 Swift source memberships, scheme, plist, icon assets, deployment settings, and command permissions passed ({len(paths)} references).')
+source_count=len(list((root/'Sources').rglob('*.swift')))
+print(f'Project paths, {source_count} Swift source memberships, scheme, plist, icon assets, deployment settings, and command permissions passed ({len(paths)} references).')

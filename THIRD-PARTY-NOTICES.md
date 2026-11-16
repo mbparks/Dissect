@@ -25,3 +25,8 @@ preview; that does not change their copyright or licensing.
 
 The source repository itself contains no downloaded engine/runtime archives.
 The app icon and C sample fixtures are original Dissect assets.
+
+The processor-definition directory is read-only in the compiled app. This uses
+Ghidra's supported read-only installation behavior and prevents temporary
+Sleigh lock files from changing the signed app. All bundled `.sla` language
+definitions are precompiled; upstream Java code is unchanged.

@@ -59,3 +59,7 @@ cp examples/firmware-arm64-macho.o "$destination/Contents/Resources/Samples/"
 cp LICENSE THIRD-PARTY-NOTICES.md "$destination/Contents/Resources/Notices/"
 find "$runtime" -type d -name __pycache__ -prune -exec rm -rf {} +
 printf '%s\n' 'Ghidra 12.2 / PyGhidra 3.2.0 / JPype 1.5.2 / CPython 3.13.18 / Corretto 25.0.5.0.10' > "$destination/Contents/Resources/Notices/RUNTIME-VERSIONS.txt"
+# Ghidra 12.2 creates .sla.lock files beside processor definitions when writable.
+# A signed app contains immutable, precompiled languages. Ghidra's supported
+# read-only-install path skips those locks and reads the existing .sla files.
+chmod -R a-w "$runtime/ghidra/Ghidra/Processors"
